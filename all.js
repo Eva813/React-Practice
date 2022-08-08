@@ -41,8 +41,12 @@ function App() {
   const [exchangeLog, setExchangeLog] = useState([
     // { TWD: 100, countryCurrency: 44.0, country: 'JSP' }
   ]);
+
   const exchangeMoney = (TWD, countryCy, country) => {
     console.log('ee', TWD, countryCy, country, 'money:', money)
+    console.log('ddd', TWD)
+    if (isNaN(TWD)) return alert('Please input numbers!')
+    if (wallet - TWD < 0) return alert("You don't have enough money!")
     setWallet((prev) => prev - TWD)
     setExchangeLog((prev) => {
       return [
@@ -63,9 +67,10 @@ function App() {
     const { item } = props
     let currentMoney = Math.round(item.rate * money * 100) / 100;
     return (
-      <li className="text-xl mb-2 px-6 py-2 border-b border-gray-200 w-full">
-        {item.name}（{item.rate}）: {!isNaN(money) ? currentMoney : "input numbers"}
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold  py-2 px-4 ml-4 rounded" onClick={() => exchangeMoney(money, currentMoney, item.name)}>Exchange</button>
+      <li className="flex text-xl mb-2 px-6 py-2 border-b border-gray-200 justify-between ">
+        <div className="align-middle leading-10"> {item.name}（{item.rate}）: {!isNaN(money) ? currentMoney : "input numbers"}</div>
+
+        <button className="bg-teal-500 hover:bg-teal-700 text-white font-bold  py-2 px-4 ml-4 rounded " onClick={() => exchangeMoney(money, currentMoney, item.name)}>Exchange</button>
       </li>
     );
   }
@@ -83,17 +88,17 @@ function App() {
   return (
     <>
       <div className="bg-rose-100 text-blake text-lg">
-        <div className="flex flex-col p-10 mx-auto h-screen justify-center items-cente  bg-white max-w-4xl">
-          <h1 className="text-4xl mb-8">匯率兌換</h1>
+        <div className="flex flex-col p-10 mx-auto h-screen justify-center items-cente  bg-white max-w-4xl shadow-xl">
+          <h1 className="text-4xl mb-8 text-center">Exchange Rate</h1>
           <h2 className="text-3xl mb-4">Add New Currency</h2>
 
-          <div className="flex ">
+          <div className="flex mb-4">
             <input className="bg-gray-50 border border-gray-300 text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mr-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Currency Name" onChange={(e) => setNewCur(e.target.value)} type="text" />
             <input className="bg-gray-50 border border-gray-300 text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  mr-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Currency Rate" onChange={(e) => setCurrencyRate(e.target.value)} type="text" />
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold  py-2 px-4 rounded" onClick={handAddCurrency}>Add currency</button>
+            <button className="bg-teal-500 hover:bg-teal-700 text-white font-bold  py-2 px-4 rounded" onClick={handAddCurrency}>Add currency</button>
           </div>
-          <h2 className="text-3xl mb-4">You have {wallet} in wallet</h2>
-          <h2 className="text-3xl mb-4">Input Exchange Amount (TWD)</h2>
+          <h2 className="text-3xl mb-4">You have <span className="text-green-700">{wallet}</span>  in wallet !</h2>
+          <h2 className="text-2xl mb-4">Input Exchange Amount (TWD)</h2>
           <div className="flex">
             <input className="bg-gray-50 border border-gray-300 text-gray-900 text-xl rounded-lg leading-8 mb-4 focus:ring-blue-500  focus:border-blue-500 block w-full p-2.5  mr-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="amount" onChange={(e) => setMoney(e.target.value)} type="text" />
           </div>
